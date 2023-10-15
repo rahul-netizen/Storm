@@ -1,0 +1,5 @@
+[flake8]
+# allow unused variables
+ignore = W293,E303,F401, W503
+max-complexity = 10
+max-line-length = 200

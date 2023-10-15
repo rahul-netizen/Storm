@@ -1,0 +1,17 @@
+sqlalchemy
+python-dotenv
+psycopg2-binary
+oauth2client
+gspread
+pre-commit
+mypy
+isort
+black
+flake8
+# pep8-naming
+bandit
+fastapi
+uvicorn[standard]
+snowflake-sqlalchemy
+pandas
+bcrypt
