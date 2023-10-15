@@ -1,0 +1,11 @@
+name: ci
+on: [pull_request]
+  workflow_dispatch:
+jobs:
+  run-ci-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: Run CI test
+        run: make ci
