@@ -17,7 +17,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7
 JWT_REFRESH_SECRET_KEY = "d12867e05d2c6840c212046db1501791bc2b9810d882a421ee759cfc7e2dfc17883b501d4217aad60c1d9f9446cb5a0277d4bfbe"
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
@@ -39,12 +39,12 @@ class TokenData(BaseModel):
     username: str | None = None
 
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
+# def get_password_hash(password):
+#     return pwd_context.hash(password)
 
 
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
+# def verify_password(plain_password, hashed_password):
+#     return pwd_context.verify(plain_password, hashed_password)
 
 
 def authenticate_user(db: Session, username: str, password: str):
