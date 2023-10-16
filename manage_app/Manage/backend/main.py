@@ -111,7 +111,8 @@ async def auth(request: Request):
     # token = await oauth.FusionAuth.authorize_access_token(request)
     user = token["userinfo"]
     request.session.update({"user": dict(user)})
-    return user
+    # return user
+    return RedirectResponse(request.url_for("home"))
 
 
 def get_logout_url():
@@ -130,13 +131,12 @@ def logout(request: Request):
 
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
-    # data = {
-    #     'request': request,
-    #     'message': 'Hello World !'
-    # }
+    data = {"request": request, "message": "Hello World !"}
     user = request.session.get("user")
     if user:
-        # return templates.TemplateResponse('home.html', context=data, status_code=status.HTTP_200_OK)
+        return templates.TemplateResponse(
+            "home.html", context=data, status_code=status.HTTP_200_OK
+        )
         data = json.dumps(user)
         html = f'<pre>{data}</pre><a href="/logout">logout</a>'
         return HTMLResponse(html)

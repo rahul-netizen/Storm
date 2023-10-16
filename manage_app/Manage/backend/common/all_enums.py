@@ -13,5 +13,5 @@ class DBOptions(str, ExtendedEnum):
 
 
 class FILE_TYPE(str, ExtendedEnum):
-    csv: str = "csv"
+    csv: str = 'csv'
     excel: str = "excel"
