@@ -1,5 +1,0 @@
-snowflake-sqlalchemy
-sqlalchemy
-python-multipart
-python-jose[cryptography]
-passlib[bcrypt]
