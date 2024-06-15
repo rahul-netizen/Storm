@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+
+  # reverse-proxy:
+  #   # The official v2 Traefik docker image
+  #   image: traefik:v2.11
+  #   # Enables the web UI and tells Traefik to listen to docker
+  #   command: --api.insecure=true --providers.docker
+  #   ports:
+  #     # The HTTP port
+  #     - "80:80"
+  #     # The Web UI (enabled by --api.insecure=true)
+  #     - "8080:8080"
+  #   volumes:
+  #     # So that Traefik can listen to the Docker events
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
+  # whoami:
+  #   # A container that exposes an API to show its IP address
+  #   image: traefik/whoami
+  #   labels:
+  #     - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.api.rule=Host(`my-site.com/api`) && PathPrefix(`/api`)"
+  #     - "traefik.http.routers.api.middlewares=strip-prefix"
+  #     - "traefik.http.middlewares.strip-prefix.stripprefix.prefixes=/api"
+  #     - "traefik.http.services.api.loadbalancer.server.port=80"
+
+  # search:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+  #   environment:
+  #     cluster.name: fusionauth
+  #     bootstrap.memory_lock: "true"
+  #     discovery.type: single-node
+  #     ES_JAVA_OPTS: ${ES_JAVA_OPTS}
+  #   healthcheck:
+  #     test: [ "CMD", "curl",  "--fail" ,"--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:9200/" ]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - search_net
+  #   restart: unless-stopped
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - search_data:/usr/share/elasticsearch/data
+
+  # fusionauth:
+  #   image: fusionauth/fusionauth-app:latest
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     search:
+  #       condition: service_healthy
+  #   environment:
+  #     DATABASE_URL: jdbc:postgresql://db:5432/fusionauth
+  #     DATABASE_ROOT_USERNAME: ${POSTGRES_USER}
+  #     DATABASE_ROOT_PASSWORD: ${POSTGRES_PASSWORD}
+  #     DATABASE_USERNAME: ${DATABASE_USERNAME}
+  #     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+  #     FUSIONAUTH_APP_MEMORY: ${FUSIONAUTH_APP_MEMORY}
+  #     FUSIONAUTH_APP_RUNTIME_MODE: development
+  #     FUSIONAUTH_APP_URL: http://fusionauth:9011
+  #     SEARCH_SERVERS: http://search:9200
+  #     SEARCH_TYPE: elasticsearch
+
+    # networks:
+    #   - search_net
+    # restart: unless-stopped
+    # ports:
+    #   - 9011:9011
+    # volumes:
+    #   - fusionauth_config:/usr/local/fusionauth/config
+volumes:
+  fusionauth_config:
+  search_data:
+
+networks:
+
+  search_net:
+    driver: bridge
+  
+  internal: 
+    driver: bridge

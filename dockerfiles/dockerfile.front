@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY ./requirements.txt /app/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+
+COPY ./frontend /app
+
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+
+# If running behind a proxy like Nginx or Traefik add --proxy-headers
+ENTRYPOINT ["streamlit", "run", "Home.py", "--server.port=8502" ,"--server.address=0.0.0.0","--server.headless=true"]
+# ,"--server.enableWebsocketCompression=false"]
+# "--server.enableCORS=false","--server.enableXsrfProtection=false" ]
+# ,]

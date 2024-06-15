@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block body %}
+
+</br>
+</br>
+</br>
+<div class="container" style="border: 12px;">
+    <form class="row row-cols-lg-auto g-3 align-items-center" action="/upload_file" method="post"
+        enctype="multipart/form-data">
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Database</label>
+            <select class="form-select" id="inputGroupSelect01" name="database">
+                <option selected>Choose...</option>
+                {% for choice in db_options %}
+                <option value={{choice.value}}>{{choice.value}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            <input name="username" type="text" class="form-control" placeholder="Username" aria-label="Username"
+                aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            <input name="hostname" type="text" class="form-control" placeholder="Hostname" aria-label="hostname"
+                aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">#</span>
+            <input name="password" type="password" class="form-control" placeholder="Password" aria-label="Password"
+                aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">#</span>
+            <input name="port" type="number" class="form-control" placeholder="Port" aria-label="Port"
+                aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">/</span>
+            <input name="database_name" type="text" class="form-control" placeholder="Database name"
+                aria-label="Database name" aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap">
+            <span class="input-group-text" id="addon-wrapping">/</span>
+            <input name="schema" type="text" class="form-control" placeholder="Schema name"
+                aria-label="Schema name" aria-describedby="addon-wrapping">
+        </div>
+        <div class="input-group flex-nowrap">
+            <label for="formFileMultiple" id="addon-wrapping"></label>
+            <input name="files" class="form-control" type="file" id="formFileMultiple" multiple>
+        </div>
+        <!-- <script>var clicked = false
+            document.getElementById('button_submit').addEventListener("click", function () {
+                clicked = true
+            });
+        </script> -->
+
+        <!-- <div class="col-12">
+            <button type="submit" id="button_submit" class="btn btn-primary">Submit</button>
+            {% if clicked %}
+            <button class="btn btn-primary" type="button" o disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Uploading data...
+            </button>
+            {% else %}
+            <label> Done.</label>
+
+            {% endif %}
+        </div> -->
+
+    </form>
+</div>
+
+{% endblock %}

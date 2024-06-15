@@ -1,0 +1,13 @@
+credentials:
+  usernames:
+    admin:
+      email: rahul@newtuple.com
+      name: Rahul Kumar
+      password: $2b$12$P.usrebk8pZNeX5gK4DqiOLpXQCDLEtDgHLYnXMqDKZwTM2vTwSe2 # Placeholder for hashed password of 'abc'
+cookie:
+  expiry_days: 30
+  key: some_signature_key # Must be string
+  name: some_cookie_name
+preauthorized:
+  emails:
+  - dhiraj@gnewtuple.com
