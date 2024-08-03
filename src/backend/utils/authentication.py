@@ -1,7 +1,7 @@
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from models.user import user_models, user_schemas, crud
+from models.user import models, schemas, crud
 from routers.file_routers import get_db
 
 from sqlalchemy.orm import Session
@@ -105,7 +105,7 @@ def get_current_user(token: Annotated[str, Depends(oauth2_scheme)],db: Session =
     return user
  
 
-def get_current_active_user(current_user: Annotated[user_schemas.User,Depends(get_current_user)]):
+def get_current_active_user(current_user: Annotated[schemas.User,Depends(get_current_user)]):
     if not current_user.active:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user")
     return current_user

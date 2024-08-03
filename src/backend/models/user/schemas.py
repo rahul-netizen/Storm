@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from models.base_schema import BaseModel, ConfigDict
 
 class User(BaseModel):
     user_id: int | None = None
@@ -7,6 +7,6 @@ class User(BaseModel):
     active: bool | None = None
 
 class UserCreate(User):
+    model_config = ConfigDict(from_attributes=True)
+
     hashed_password: str
-    class config:
-        orm_mode = True

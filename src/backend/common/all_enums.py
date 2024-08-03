@@ -14,9 +14,9 @@ class DBOptions(str, ExtendedEnum):
 
 
 class FILE_TYPE(str, ExtendedEnum):
-    csv: str = "csv"
-    excel: str = "excel"
-    xls: str = "xls"
-    xlsx: str = "xlsx"
-    json: str = "json"
-    xml: str = "xml"
+    csv: str = ".csv"
+    excel: str = ".excel"
+    xls: str = ".xls"
+    xlsx: str = ".xlsx"
+    json: str = ".json"
+    xml: str = ".xml"

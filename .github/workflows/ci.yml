@@ -1,14 +1,28 @@
-name: ci
-on: [push, pull_request]
+name: Continous Intergration
+on:
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
 
 jobs:
-  run-ci-tests:
+
+  lint_format_secure:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
-      - name: Install deps
-        run: make deps
-      - name: Run CI test
-        run: make ci
-        
+      - name: Checkout
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+            ref: ${{ github.head_ref || github.ref_name }}
+
+      - name: Format, lint and security checkss
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "Running CI steps.."
+          pip3 install pre-commit
+          git branch
+          ls -la
+          pre-commit run --all-files
+      #

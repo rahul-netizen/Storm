@@ -38,8 +38,15 @@ Base = declarative_base()
 metadata = Base.metadata
 
 
+def get_db():
+    db = sessionlocal()
+    try: 
+        yield db
+    finally:
+        db.close()
+
 @contextmanager
-def get_custom_db_contxt_session(self, engine: Engine):
+def get_custom_db_contxt_session(engine: Engine):
     """Creates a context with an open SQLAlchemy session."""
     db_session, connection = None, None
     try:

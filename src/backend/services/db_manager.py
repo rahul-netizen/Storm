@@ -15,8 +15,7 @@ from common.all_enums import DBOptions
 
 @dataclass()
 class Database():
-    """Class for mainting the database connection information
-    """
+    """Class for mainting the database connection information"""
     _username: str
     _password: str
     _hostname: str
@@ -30,8 +29,8 @@ class Database():
     def get_engine(self) -> db.engine:
         pass
     
-    class Config:
-        orm_mode = True
+    # class Config:
+    #     orm_mode = True
 
 @dataclass
 class Postgres(Database):

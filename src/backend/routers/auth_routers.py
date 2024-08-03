@@ -1,23 +1,15 @@
-from fastapi import APIRouter, Response, Request, Depends, HTTPException, status, Form
+from fastapi import APIRouter, Response, Request, Depends, HTTPException, status
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from sqlalchemy.orm import Session
-from utils.base_database import sessionlocal
+from utils.base_database import  get_db
 
-from typing import Annotated, List, Optional
+from typing import Annotated
 from datetime import timedelta
 from utils.authentication import ACCESS_TOKEN_EXPIRE_MINUTES,REFRESH_TOKEN_EXPIRE_MINUTES, authenticate_user, create_access_token,create_refresh_token, Token
 
-router = APIRouter()
-templates = Jinja2Templates(directory='templates')
-
-def get_db():
-    db = sessionlocal()
-    try: 
-        yield db
-    finally:
-        db.close()
+router = APIRouter(prefix='/api', tags=["auth"])
 
 @router.post("/token",summary="Create access and refresh tokens for user", response_model=Token)
 async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()],db: Session = Depends(get_db)):

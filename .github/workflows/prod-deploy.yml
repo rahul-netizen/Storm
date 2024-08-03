@@ -1,0 +1,52 @@
+name: Build and Deploy - DEV
+on:
+  push:
+    branches:
+      - prod
+
+  workflow_dispatch:
+
+jobs:
+  init_job:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+              ref: main
+
+  test:
+    runs-on: ubuntu-latest
+    needs: init_job
+    steps:
+      - name: dev_deploy
+        run: echo "dev here"
+
+
+  # fetch_latest_changes:
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   steps:
+  #     - name: Fetch latest changes
+  #     uses: appleboy/ssh-action@v1.0.3
+  #     with:
+  #       host: ${{ secrets.SSH_HOST }}
+  #       username: ${{ secrets.SSH_USERNAME }}
+  #       key: ${{ secrets.SSH_KEY }}
+  #       script: |
+  #         echo "Starting DEV deployment.."
+  #         ./deploy.sh fetch_latest_changes main
+
+  # build_deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: fetch_latest_changes
+  #   steps:
+  #     - name: Build docker containers
+  #     uses: appleboy/ssh-action@v1.0.3
+  #     with:
+  #       host: ${{ secrets.HOST }}
+  #       username: ${{ secrets.USERNAME }}
+  #       key: ${{ secrets.SSH_KEY }}
+  #       script: |
+  #         echo "Starting DEV deployment build.."
+  #         ./deploy.sh fetch_latest_changes main

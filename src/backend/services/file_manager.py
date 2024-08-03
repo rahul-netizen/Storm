@@ -10,7 +10,7 @@ from common.all_enums import FILE_TYPE
 from utils.logger import logger
 
 @dataclass
-class FileManager():
+class FileManager:
     file_io : bytes
     filename: str
     file_extension: str
@@ -43,7 +43,7 @@ class FileManager():
                         raise ValueError(f'Provided file type is not supported, please select one of {FILE_TYPE.list()}')
                  
             logger.info(f'Uploaded {self.filename} file succssfully..')
+            return self.filename
 
         except exc.OperationalError as e:
-            logger.error("Valid connection details were not provided, failed connecting to db..", exc_info=1)
-            raise ValueError("Valid connection details were not provided, failed connecting to database")
+            raise ValueError(f"Valid connection details were not provided, failed connecting to database .. failed with error {e} ")

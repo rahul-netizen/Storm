@@ -3,21 +3,22 @@ import os
 from logging.handlers import TimedRotatingFileHandler
 
 from rich.logging import RichHandler
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
-log_dir = os.path.join(os.path.normpath(
-    os.getcwd() + os.sep + os.pardir), 'logs')
-log_fname = os.path.join(log_dir, 'logger.log')
+current_path = Path(".")
+log_dir = current_path / 'logs'
+log_fname = current_path / 'logs' / 'logger.log'
 
-if not os.path.exists(log_dir):
-    os.mkdir(log_dir)
+if not log_dir.exists():
+    log_dir.mkdir(exist_ok=True)
 
 # shell_handler = logging.StreamHandler()
 shell_handler = RichHandler()
 file_handler = TimedRotatingFileHandler(
-    log_fname.strip('.'),  when='midnight', backupCount=30)
-file_handler.suffix = r'%Y-%m-%d-%H-%M-%S.log'
+    log_fname.as_posix().strip('.'),  when='midnight', backupCount=30)
+file_handler.suffix = r'%Y-%m-%d.log'
 
 logger.setLevel(logging.DEBUG)
 shell_handler.setLevel(logging.DEBUG)
@@ -38,47 +39,3 @@ file_handler.setFormatter(file_formatter)
 
 logger.addHandler(shell_handler)
 logger.addHandler(file_handler)
-
-
-import time
-from typing import Tuple
-
-from opentelemetry import trace
-# from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
-#     OTLPSpanExporter
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.logging import LoggingInstrumentor
-from opentelemetry.sdk.resources import Resource
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from starlette.middleware.base import (BaseHTTPMiddleware,
-                                       RequestResponseEndpoint)
-from starlette.requests import Request
-from starlette.responses import Response
-from starlette.routing import Match
-from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
-from starlette.types import ASGIApp
-
-# pip3 install opentelemetry-exporter-richconsole
-# pip3 install opentelemetry-instrumentation-fastapi
-# pip3 install opentelemetry-instrumentation-logging
-
-def setting_otlp(app: ASGIApp, app_name: str, log_correlation: bool = True) -> None: #setting_otlp(app, APP_NAME, OTLP_GRPC_ENDPOINT)
-    # Setting OpenTelemetry
-    # set the service name to show in traces
-    resource = Resource.create(attributes={
-        "service.name": app_name,
-        "compose_service": app_name
-    })
-
-    # set the tracer provider
-    tracer = TracerProvider(resource=resource)
-    trace.set_tracer_provider(tracer)
-
-    # tracer.add_span_processor(BatchSpanProcessor(
-    #     OTLPSpanExporter(endpoint=endpoint)))
-
-    if log_correlation:
-        LoggingInstrumentor().instrument(set_logging_format=True)
-
-    FastAPIInstrumentor.instrument_app(app, tracer_provider=tracer)

@@ -75,14 +75,74 @@ services:
     #   - 9011:9011
     # volumes:
     #   - fusionauth_config:/usr/local/fusionauth/config
+
+  db:
+    image: postgres:12.9
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - db_net
+    restart: unless-stopped
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  pg-admin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    volumes:
+      - pgadmin_con_data:/var/lib/pgadmin:rw
+    ports:
+      - "8001:80"
+    networks:
+      - db_net
+    depends_on:
+      - pg-database
+  
+  mongodb-service:
+    container_name: mongodb-service
+    image: mongo:latest
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - 27017:27017
+    networks:
+      - db_net
+    dns:
+      - 8.8.8.8
+    restart: "unless-stopped"
+    volumes:
+      - mongodb_data:/data/db
+      # - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+
 volumes:
-  fusionauth_config:
-  search_data:
+  # fusionauth_config:
+  # search_data:
+  
+  db_data:
+
+  pgadmin_con_data:
+    name: pgadmin_con_data
+    external: true
+
+  mongodb_data:
+    name: mongodb_data
+    external: true
 
 networks:
 
   search_net:
-    driver: bridge
-  
+    driver: bridge  
   internal: 
+    driver: bridge
+  db_net:
     driver: bridge
