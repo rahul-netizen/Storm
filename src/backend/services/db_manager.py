@@ -2,7 +2,7 @@ from dataclasses import dataclass
 # from pydantic import BaseModel
 import sqlalchemy as db
 from sqlalchemy.engine import URL
-# from snowflake.sqlalchemy import URL as snowflake_url
+from snowflake.sqlalchemy import URL as snowflake_url
 from sqlalchemy.dialects import postgresql
 from sqlalchemy import create_engine, inspect
 
@@ -52,14 +52,14 @@ class Postgres(Database):
 @dataclass
 class Snowflake(Database):
     def get_connection_string(self) -> str:
-        def snowflake_url(**kwargs):
-            pass
+        # def snowflake_url(**kwargs):
+        #     pass
         return snowflake_url(
-            # drivername='snowflake',
+            drivername='snowflake',
             account=self._hostname,
             user=self._username,
             password=self._password,
-            # port=self._port,
+            port=self._port,
             database=self._database_name,
         )
     def get_engine(self, connection_string: str) -> db.engine:
